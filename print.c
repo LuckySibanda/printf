@@ -1,123 +1,109 @@
 #include "main.h"
-#include <stdarg.h>
-#include <unistd.h>
 
 /**
- * print_char - Prints a character to standard output.
- * @args: A va_list pointing to the argument to print.
- * @count: A pointer to an integer representing the count of characters printed.
+ * print_char - Prints a character
+ *
+ * @valist: A list of arguments containing
+ *          the character to be printed
+ *
+ * Return: The number of characters printed
  */
-void print_char(va_list args, int *count)
+int print_char(va_list valist)
 {
-	char c = va_arg(args, int);
-	write(1, &c, 1);
-	(*count)++;
+	char c = va_arg(valist, int);
+
+	_putchar(c);
+
+	return (1);
 }
 
 /**
- * print_string - Prints a string to standard output.
- * @args: A va_list pointing to the argument to print.
- * @count: A pointer to an integer representing the count of characters printed.
+ * print_string - Prints a string of characters
+ *
+ * @valist: A list of arguments containing
+ *          the string to be printed
+ *
+ * Return: The number of characters printed
  */
-void print_string(va_list args, int *count)
+int print_string(va_list valist)
 {
-	char *str = va_arg(args, char *);
+	char *str = va_arg(valist, char *);
+	int len = 0;
+
+	if (str == NULL)
+		str = "(null)";
+
 	while (*str)
 	{
-		write(1, str, 1);
-		(*count)++;
+		_putchar(*str);
 		str++;
+		len++;
 	}
+
+	return (len);
 }
 
 /**
- * print_percent - Prints a percent sign to standard output.
- * @count: A pointer to an integer representing the count of characters printed.
- */
-void print_percent(int *count)
-{
-	write(1, "%", 1);
-	(*count)++;
-}
-
-/**
- * print_int - Prints an integer to standard output.
- * @args: A va_list pointing to the argument to print.
- * @count: A pointer to an integer representing the count of characters printed.
- */
-void print_int(va_list args, int *count)
-{
-	int n = va_arg(args, int);
-	int len = 1;
-
-	if (n < 0)
-	{
-		write(1, "-", 1);
-		(*count)++;
-		n = -n;
-	}
-
-	while (n / len >= 10)
-		len *= 10;
-
-	while (len > 0)
-	{
-		write(1, &("0123456789"[(n / len) % 10]), 1);
-		(*count)++;
-		len /= 10;
-	}
-}
-
-/**
- * _printf - Prints a formatted string to standard output.
- * @format: A pointer to a string of characters to be printed.
+ * print_percent - Prints a percent symbol
  *
- * Return: The number of characters printed.
+ * @valist: A list of arguments (unused)
+ *
+ * Return: The number of characters printed
  */
-int _printf(const char *format, ...)
+int print_percent(va_list valist __attribute__((unused)))
 {
-	va_list args;
-	int i = 0, count = 0;
+	_putchar('%');
 
-	va_start(args, format);
+	return (1);
+}
 
-	while (format && format[i])
+/**
+ * print_int - Prints an integer
+ *
+ * @valist: A list of arguments containing
+ *          the integer to be printed
+ *
+ * Return: The number of characters printed
+ */
+int print_int(va_list valist)
+{
+	int num = va_arg(valist, int);
+	int num_len = 0;
+	int divisor = 1;
+
+	if (num < 0)
 	{
-		if (format[i] == '%')
+		_putchar('-');
+		num_len++;
+
+		if (num == INT_MIN)
 		{
-			i++;
-			switch (format[i])
-			{
-				case 'c':
-					print_char(args, &count);
-					break;
-				case 's':
-					print_string(args, &count);
-					break;
-				case '%':
-					print_percent(&count);
-					break;
-				case 'd':
-					print_int(args, &count);
-					break;
-				case 'i':
-					print_int(args, &count);
-					break;
-				default:
-					write(1, &format[i - 1], 2);
-					count += 2;
-					break;
-			}
+			/*
+			 * Convert INT_MIN + 1 to positive,
+			 * and print the first digit ('2')
+			 */
+			num++;
+			num_len++;
+			_putchar('2');
+			num %= divisor * 10;
+			divisor /= 10;
 		}
-		else
-		{
-			write(1, &format[i], 1);
-			count++;
-		}
-		i++;
+
+		num = -num;
 	}
 
-	va_end(args);
+	/* Determine the divisor */
+	while (num / divisor >= 10)
+		divisor *= 10;
 
-	return (count);
+	/* Print each digit */
+	while (divisor != 0)
+	{
+		_putchar(num / divisor + '0');
+		num %= divisor;
+		divisor /= 10;
+		num_len++;
+	}
+
+	return (num_len);
 }
