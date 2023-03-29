@@ -1,7 +1,6 @@
 #include "main.h"
 #include <stddef.h>
 
-
 /**
  * print_char - Prints a char to stdout
  * @args: List of arguments
@@ -33,7 +32,6 @@ int print_string(va_list args)
 
 	for (i = 0; str[i] != '\0'; i++)
 		_putchar(str[i]);
-
 	return (i);
 }
 
@@ -43,8 +41,9 @@ int print_string(va_list args)
  *
  * Return: Number of chars printed
  */
-int print_percent(__attribute__((unused))va_list args)
+int print_percent(va_list args)
 {
+	(void) args;
 	_putchar('%');
 	return (1);
 }
