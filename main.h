@@ -1,24 +1,32 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include <stddef.h>
 #include <stdarg.h>
 
 /**
-
-struct print_fn - Struct print function
-@fmt: The format
-@fn: The function
-*/
+ * struct print_fn - Struct containing a print function
+ * and its associated format specifier
+ * @specifier: The format specifier
+ * @fn: The print function
+ */
 typedef struct print_fn
 {
-char *fmt;
-int (*fn)(va_list);
+	char *specifier;
+	int (*fn)(va_list);
 } print_fn_t;
-int _putchar(char c);
+
+/**
+ * struct print_specifiers - Struct containing a format specifier
+ * and its associated print function
+ * @specifier: The format specifier
+ * @print_fn: The print function associated with the format specifier
+ */
+typedef struct print_specifiers
+{
+	char specifier;
+	int (*print_fn)(va_list);
+} print_specifiers_t;
+
 int _printf(const char *format, ...);
-int print_c(va_list args);
-int print_s(va_list args);
-int print_percent(va_list args);
 
 #endif /* MAIN_H */
