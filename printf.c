@@ -42,6 +42,11 @@ int _printf(const char *format, ...)
 						printed++;
 					}
 					break;
+				case 'd':
+				case 'i':
+					printf("%d", va_arg(arg_list, int));
+					printed++;
+					break;
 				case '%':
 					_putchar('%');
 					printed++;
